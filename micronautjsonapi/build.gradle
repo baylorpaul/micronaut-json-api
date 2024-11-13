@@ -29,3 +29,10 @@ java {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
+
+tasks.named('jar') {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
+    }
+}
