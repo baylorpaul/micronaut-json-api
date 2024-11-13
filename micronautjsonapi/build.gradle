@@ -28,6 +28,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+    // generate a sources JAR for the library
+    withSourcesJar()
 }
 
 tasks.named('jar') {
