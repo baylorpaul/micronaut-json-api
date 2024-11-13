@@ -1,26 +1,30 @@
 
 plugins {
     // Apply the java-library plugin for API and implementation separation.
-    id 'java-library'
+    id("java-library")
+    id("io.micronaut.application") version "4.4.2"
+    id("idea")
 }
 
 version = '0.1.0'
 group = 'io.github.baylorpaul'
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
-    // Use JUnit test framework.
-    testImplementation libs.junit
-
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api libs.commons.math3
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation libs.guava
+    annotationProcessor("org.projectlombok:lombok")
+    implementation("io.micronaut:micronaut-http-server")
+    implementation("io.micronaut.data:micronaut-data-model")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation("io.micronaut.validation:micronaut-validation")
+    compileOnly("org.projectlombok:lombok")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers")
+    testCompileOnly("org.projectlombok:lombok")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -36,5 +40,13 @@ tasks.named('jar') {
     manifest {
         attributes('Implementation-Title': project.name,
                 'Implementation-Version': project.version)
+    }
+}
+
+micronaut {
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("io.github.baylorpaul.micronautjsonapi.*")
     }
 }
