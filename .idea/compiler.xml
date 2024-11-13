@@ -7,7 +7,7 @@
         <option name="micronaut.processing.annotations" value="io.github.baylorpaul.micronautjsonapi.*" />
         <option name="micronaut.processing.group" value="io.github.baylorpaul" />
         <option name="micronaut.processing.incremental" value="true" />
-        <option name="micronaut.processing.module" value="micronautjsonapi" />
+        <option name="micronaut.processing.module" value="micronaut-json-api" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut.data/micronaut-data-processor/4.9.4/be5efa55c4083deeff94ac90f73f93e9740e5e80/micronaut-data-processor-4.9.4.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micronaut.serde/micronaut-serde-processor/2.11.0/80b47e60ad518244c9ad39186ab2823c8b63c3da/micronaut-serde-processor-2.11.0.jar" />
@@ -41,8 +41,8 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/4c28afe1991a941d7702fe1362c365f0a8641d1e/jakarta.inject-api-2.0.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.javaparser/javaparser-core/3.26.2/795eca30f20fdc110d1a02a1f0e7ad207e17e7c1/javaparser-core-3.26.2.jar" />
         </processorPath>
-        <module name="micronaut-json-api.micronautjsonapi.main" />
-        <module name="micronaut-json-api.micronautjsonapi.test" />
+        <module name="micronaut-json-api.micronaut-json-api.main" />
+        <module name="micronaut-json-api.micronaut-json-api.test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21" />
