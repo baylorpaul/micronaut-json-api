@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'micronaut-json-api'
-include('lib')
+include('micronautjsonapi')
