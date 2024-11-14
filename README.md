@@ -4,6 +4,11 @@ A [JSON:API](https://jsonapi.org/) library for [Micronaut](https://micronaut.io/
 
 ## API implementation with JSON:API
 
+### Setup
+
+In your `application.properties`, set `micronaut.serde.serialization.inclusion=non_absent`. This will continue omitting null and Optional.empty(), but for the JSON:API spec, include empty collections.
+I.e. it is desirable to have `"attributes":{}` instead of excluding `attributes`.
+
 ### Retrieve a record
 
 See the samples in the test packages, such as `User.java` or `GrantingToken.java`. For entities that you want to expose to
