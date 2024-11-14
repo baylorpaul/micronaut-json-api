@@ -6,7 +6,30 @@ A [JSON:API](https://jsonapi.org/) library for [Micronaut](https://micronaut.io/
 
 ### Setup
 
-In your `application.properties`, set `micronaut.serde.serialization.inclusion=non_absent`. This will continue omitting null and Optional.empty(), but for the JSON:API spec, include empty collections.
+#### Add GitHub Packages Repository to your `build.gradle`
+```groovy
+repositories {
+    // You probably also need mavenCentral() for other libraries
+    mavenCentral()
+    // For this library
+    maven {
+        url = uri("https://maven.pkg.github.com/baylorpaul/micronaut-json-api")
+    }
+}
+```
+#### Add Dependency to your `build.gradle`
+```groovy
+dependencies {
+    implementation("io.github.baylorpaul:micronaut-json-api:VERSION")
+}
+```
+
+#### Update Application Serialization
+In your `application.properties`, set:
+
+	micronaut.serde.serialization.inclusion=non_absent
+
+This will continue omitting null and Optional.empty(), but for the JSON:API spec, include empty collections.
 I.e. it is desirable to have `"attributes":{}` instead of excluding `attributes`.
 
 ### Retrieve a record

@@ -54,17 +54,28 @@ micronaut {
     }
 }
 
+// Publish via GitHub Packages with e.g. GITHUB_ACTOR=myuser GITHUB_TOKEN=myPersonalAccessToken ./gradlew publish
 publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = project.group
-            artifactId = project.name
-            version = project.version
-
-            from components.java
+    repositories {
+        //mavenLocal()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/baylorpaul/micronaut-json-api")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
         }
     }
-    repositories {
-        mavenLocal()
+    publications {
+        //maven(MavenPublication) {
+        //    groupId = project.group
+        //    artifactId = project.name
+        //    version = project.version
+        //    from components.java
+        //}
+        gpr(MavenPublication) {
+            from(components.java)
+        }
     }
 }
