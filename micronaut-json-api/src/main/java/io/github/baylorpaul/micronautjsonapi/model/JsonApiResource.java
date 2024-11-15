@@ -22,6 +22,15 @@ public class JsonApiResource extends JsonApiResourceIdentifier {
 	private @Nullable SequencedMap<String, JsonApiObject<? extends JsonApiDataType>> relationships;
 	//private @Nullable JsonApiLinks links;
 
+	/**
+	 * Create a JSON:API resource
+	 * @param type the resource type. Every resource object MUST contain a type member.
+	 * @param id the ID of the resource. This must be a string. Every resource object MUST contain an id member, except
+	 *              when the resource object originates at the client and represents a new resource to be created on the
+	 *              server.
+	 * @param attributes an attributes object representing some of the resource's data.
+	 * @param relationships relationships between the resource and other resources.
+	 */
 	@Builder
 	public JsonApiResource(String type, String id, SequencedMap<String, Object> attributes, SequencedMap<String, JsonApiObject<? extends JsonApiDataType>> relationships) {
 		super(type, id);

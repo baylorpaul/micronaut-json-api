@@ -12,21 +12,26 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Read and process the "include" param according to <a href="https://jsonapi.org/">JSON:API</a>.
+ * Read and process the "include" query parameter according to <a href="https://jsonapi.org/">JSON:API</a>.
  */
 public class JsonApiIncludeProcessor {
 
 	/**
+	 * A definition of a relationship path to include, as well as a function to retrieve corresponding relationships
 	 * @param includePath the "include" path, such as "author.address"
 	 * @param idsToResources a function that receives the IDs for the "include" path, and returns the resources
 	 */
-	public record RelationshipRetriever(String includePath, Function<Collection<String>, Collection<? extends JsonApiResourceable>> idsToResources) {}
+	public record RelationshipRetriever(
+			String includePath,
+			Function<Collection<String>, Collection<? extends JsonApiResourceable>> idsToResources
+	) {}
 
 	private final List<RelationshipRetriever> validIncludes;
 
 	/**
+	 * Create a processor to interpret a JSON:API "include" query parameter
 	 * @param rawInclude the raw "include" query parameter, as described by JSON:API. E.g. "author" or
-	 *            "author.address,publishingCompany" or "author&fields[articles]=title,body&fields[people]=name"
+	 *            "author.address,publishingCompany" or "author&amp;fields[articles]=title,body&amp;fields[people]=name"
 	 * @param supportedIncludePaths supported include paths, such as ["author", "author.address", "publishingCompany"],
 	 *            and corresponding functions to map IDs to resources.
 	 *            If a value such as "author.address" is supported, then "author" must also be included as a supported path.
@@ -42,10 +47,13 @@ public class JsonApiIncludeProcessor {
 
 	/**
 	 * Parse the raw include query parameter, and validate it against supported includes
-	 * @return null for none, else the valid include values sorted alphabetically by the include path, such as ["author", "author.address"]
+	 * @return null for none, else the valid include paths and corresponding functions to retrieve the resources by IDs,
+	 *         sorted alphabetically by the include path, such as ["author", "author.address"]
 	 * @throws HttpStatusException if the include query parameter includes unsupported values
 	 */
-	private static List<RelationshipRetriever> validateIncludes(String rawInclude, Collection<RelationshipRetriever> supportedIncludePaths) throws HttpStatusException {
+	private static List<RelationshipRetriever> validateIncludes(
+			String rawInclude, Collection<RelationshipRetriever> supportedIncludePaths
+	) throws HttpStatusException {
 		if (rawInclude == null || rawInclude.trim().isEmpty()) {
 			return null;
 		} else if (supportedIncludePaths == null) {
@@ -78,6 +86,7 @@ public class JsonApiIncludeProcessor {
 	/**
 	 * Look up values to include for the provided resources
 	 * @param resources the resources for which to find included values, or null for no resources
+	 * @return a list of prescribed relationships to include, or null
 	 */
 	public JsonApiArray findIncluded(Collection<? extends JsonApiResource> resources) {
 		final JsonApiArray included = validIncludes == null ? null : new JsonApiArray();
@@ -88,7 +97,9 @@ public class JsonApiIncludeProcessor {
 	}
 
 	/**
+	 * Convert an entity to a JSON:API top-level resource
 	 * @param entity the entity to convert to a top level object, or null for none
+	 * @return the entity as a JSON:API top-level resource
 	 */
 	public JsonApiTopLevelResource asTopLevelObject(JsonApiResourceable entity) {
 		final JsonApiResource data = entity == null ? null : entity.toResource();
@@ -96,7 +107,9 @@ public class JsonApiIncludeProcessor {
 	}
 
 	/**
+	 * Convert an entity collection to a JSON:API top-level object
 	 * @param entities the entities to convert to a top level object, or null for none
+	 * @return the entities as a JSON:API top-level object
 	 */
 	public JsonApiTopLevelObject<?> asTopLevelObject(Collection<? extends JsonApiResourceable> entities) {
 		final JsonApiArray data = entities == null ? null : new JsonApiArray(entities);
@@ -104,7 +117,9 @@ public class JsonApiIncludeProcessor {
 	}
 
 	/**
+	 * Convert the JSON:API resource to a JSON:API top-level resource
 	 * @param data the resource data, or null for none
+	 * @return the resource data as a JSON:API top-level resource
 	 */
 	public JsonApiTopLevelResource asTopLevelObject(JsonApiResource data) {
 		final JsonApiArray included = findIncluded(data == null ? null : Collections.singleton(data));
@@ -115,7 +130,9 @@ public class JsonApiIncludeProcessor {
 	}
 
 	/**
+	 * Convert the JSON:API resource array to a JSON:API top-level object
 	 * @param arr the resource array, or null for none
+	 * @return the resource array as a JSON:API top-level object
 	 */
 	public JsonApiTopLevelObject<?> asTopLevelObject(JsonApiArray arr) {
 		final JsonApiArray included = findIncluded(arr);
@@ -125,8 +142,17 @@ public class JsonApiIncludeProcessor {
 				.build();
 	}
 
+	/**
+	 * For allowed relationship paths, recursively retrieve the JSON:API resources for those relationships, returning
+	 * all the relationships in a single-depth, non-recursive list.
+	 * @param resources the JSON:API resources that may contain relationships
+	 * @param validIncludesForCurrentEntity the valid include paths and corresponding functions to retrieve the
+	 *            resources by IDs
+	 * @return the prescribed recursive relationships all in a single-depth, non-recursive list
+	 */
 	private static LinkedList<JsonApiResource> processRelationshipIncludes(
-			@NonNull Collection<? extends JsonApiResourceIdentifier> resources, @NonNull List<RelationshipRetriever> validIncludesForCurrentEntity
+			@NonNull Collection<? extends JsonApiResourceIdentifier> resources,
+			@NonNull List<RelationshipRetriever> validIncludesForCurrentEntity
 	) {
 		LinkedList<JsonApiResource> result = new LinkedList<>();
 
@@ -173,6 +199,13 @@ public class JsonApiIncludeProcessor {
 		return result;
 	}
 
+	/**
+	 * Find the IDs of the JSON:API resources for specific a relationship, but only for those that are non-array values.
+	 * We will not include IDs for relationships with an array of IDs, even if a single value.
+	 * @param resources the JSON:API resources that may have relationship entities
+	 * @param relationshipInclude the relationship for which to find IDs
+	 * @return the IDs of the prescribed relationship entities
+	 */
 	private static List<String> findRelationshipIds(
 			@NonNull Collection<? extends JsonApiResourceIdentifier> resources,
 			@NonNull RelationshipRetriever relationshipInclude

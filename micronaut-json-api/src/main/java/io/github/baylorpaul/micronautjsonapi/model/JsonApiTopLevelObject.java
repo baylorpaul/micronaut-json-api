@@ -14,6 +14,7 @@ import java.util.SequencedMap;
 
 /**
  * A top-level response, as defined by <a href="https://jsonapi.org/">JSON:API</a>.
+ * @param <T> - The generic type
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -25,6 +26,13 @@ public class JsonApiTopLevelObject<T extends JsonApiDataType> extends JsonApiObj
 	/** an array of resource objects that are related to the primary data and/or each other ("included resources"). */
 	private @Nullable JsonApiArray included;
 
+	/**
+	 * Create a top-level JSON:API object
+	 * @param meta a meta object that contains non-standard meta-information, if any
+	 * @param data the document's "primary data", if any
+	 * @param errors error objects, if any
+	 * @param included an array of resource objects that are related to the primary data and/or each other ("included resources")
+	 */
 	@Builder(builderMethodName = "topLevelBuilder")
 	public JsonApiTopLevelObject(
 			@Nullable SequencedMap<String, Object> meta,
@@ -42,6 +50,7 @@ public class JsonApiTopLevelObject<T extends JsonApiDataType> extends JsonApiObj
 	 * a list instead of an object (for JsonApiArray), due to use of generics. This avoids a SerdeException of "Error
 	 * decoding property" due to "Unexpected token START_ARRAY, expected START_OBJECT".
 	 * A better solution would be to use a <a href="https://micronaut-projects.github.io/micronaut-serialization/latest/guide/#serdes">custom deserializer</a> for JsonApiArray, and remove this setter.
+	 * @param included an array of resource objects that are related to the primary data and/or each other ("included resources")
 	 */
 	public void setIncluded(List<JsonApiResource> included) {
 		this.included = included == null ? null : new JsonApiArray(included);

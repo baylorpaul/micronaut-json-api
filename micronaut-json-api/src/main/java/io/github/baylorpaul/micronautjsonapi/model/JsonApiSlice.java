@@ -12,17 +12,28 @@ import java.util.List;
 import java.util.SequencedMap;
 import java.util.function.Function;
 
+/**
+ * A JSON:API representation of a slice. This models a type that supports pagination operations.
+ * A slice is a result list associated with a particular Pageable
+ * @param <T> - The generic type
+ */
 @Serdeable
 @ReflectiveAccess
 public class JsonApiSlice<T extends JsonApiResourceable> extends JsonApiTopLevelObject<JsonApiArray> {
 
 	private final Slice<T> slice;
 
+	/**
+	 * Create a JSON:API slice
+	 * @param slice a result list associated with a particular Pageable
+	 */
 	public JsonApiSlice(Slice<T> slice) {
 		this(slice, null);
 	}
 
 	/**
+	 * Create a JSON:API slice
+	 * @param slice a result list associated with a particular Pageable
 	 * @param findIncluded null for none, else a function to find included values for the collection of resources
 	 */
 	public JsonApiSlice(Slice<T> slice, Function<Collection<? extends JsonApiResource>, JsonApiArray> findIncluded) {
@@ -42,7 +53,8 @@ public class JsonApiSlice<T extends JsonApiResourceable> extends JsonApiTopLevel
 	}
 
 	/**
-	 * @return The content.
+	 * Find the slice content.
+	 * @return The slice content.
 	 */
 	@JsonIgnore
 	public List<T> getContent() {
@@ -50,6 +62,7 @@ public class JsonApiSlice<T extends JsonApiResourceable> extends JsonApiTopLevel
 	}
 
 	/**
+	 * Find the page number, zero-based
 	 * @return The page number, zero-based
 	 */
 	@JsonIgnore
@@ -58,6 +71,7 @@ public class JsonApiSlice<T extends JsonApiResourceable> extends JsonApiTopLevel
 	}
 
 	/**
+	 * Find the page size of the slice.
 	 * @return The page size of the slice.
 	 */
 	@JsonIgnore

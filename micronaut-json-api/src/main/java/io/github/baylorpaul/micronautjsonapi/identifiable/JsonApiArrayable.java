@@ -6,9 +6,19 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * A list of entities that may be transformed into JSON:API resources
+ */
 public class JsonApiArrayable extends LinkedList<JsonApiResourceable> implements JsonApiDataTypeable {
+	/**
+	 * Create a list of entities that may be transformed into JSON:API resources
+	 */
 	public JsonApiArrayable() {}
 
+	/**
+	 * Create a list of entities that may be transformed into JSON:API resources
+	 * @param list the entities that may be transformed into JSON:API resources
+	 */
 	public JsonApiArrayable(List<? extends JsonApiResourceable> list) {
 		super(list == null ? Collections.emptyList() : list);
 	}

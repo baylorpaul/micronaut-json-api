@@ -35,6 +35,8 @@ java {
     }
     // generate a sources JAR for the library
     withSourcesJar()
+    // generate a Javadoc JAR for the library
+    withJavadocJar()
 }
 
 tasks.named('jar') {

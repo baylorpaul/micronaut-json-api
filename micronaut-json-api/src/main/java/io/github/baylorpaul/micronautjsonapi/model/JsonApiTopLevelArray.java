@@ -23,6 +23,7 @@ public class JsonApiTopLevelArray extends JsonApiTopLevelObject<JsonApiArray> {
 	 * instead of an object (for JsonApiArray), due to use of generics. This avoids a SerdeException of "Error decoding
 	 * property" due to "Unexpected token START_ARRAY, expected START_OBJECT".
 	 * A better solution would be to use a <a href="https://micronaut-projects.github.io/micronaut-serialization/latest/guide/#serdes">custom deserializer</a> for JsonApiArray, and remove this setter.
+	 * @param data the document's "primary data", if any
 	 */
 	public void setData(List<JsonApiResource> data) {
 		super.setData(data == null ? null : new JsonApiArray(data));

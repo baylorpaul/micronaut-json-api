@@ -34,6 +34,15 @@ public class JsonApiService {
 	@Inject
 	private JsonMapper jsonMapper;
 
+	/**
+	 * Transform the JSON:API object's data into the provided instance type, including the ID, throwing if the value is
+	 * null
+	 * @param jsonApiObj the JSON:API object to convert to a class instance
+	 * @param clazz the type of class to convert the JSON:API object's data to
+	 * @return the JSON:API object's data as a specific instance type
+	 * @param <T> the type of instance to return
+	 * @throws HttpStatusException if the value is null
+	 */
 	public @NonNull <T extends JsonApiIdentifiable> T readDataWithId(
 			JsonApiObject<JsonApiResource> jsonApiObj, Class<T> clazz
 	) throws HttpStatusException {
@@ -41,6 +50,15 @@ public class JsonApiService {
 		return readResourceWithIdOrThrow(res, clazz);
 	}
 
+	/**
+	 * Transform the JSON:API object's data into a list of the provided instance types, including the IDs, throwing if
+	 * any value is null
+	 * @param jsonApiObj the JSON:API object to convert to a list of class instances
+	 * @param clazz the type of class to convert each item of the JSON:API object's data to
+	 * @return the JSON:API object's data as a list of the specific instance type
+	 * @param <T> the type of instances to return
+	 * @throws HttpStatusException if any value is null
+	 */
 	public @NonNull <T extends JsonApiIdentifiable> List<T> readDataWithIds(
 			JsonApiObject<JsonApiArray> jsonApiObj, Class<T> clazz
 	) throws HttpStatusException {
@@ -50,6 +68,15 @@ public class JsonApiService {
 				.toList();
 	}
 
+	/**
+	 * Transform the JSON:API object's data into the provided instance type, excluding the ID, throwing if the value is
+	 * null
+	 * @param jsonApiObj the JSON:API object to convert to a class instance
+	 * @param clazz the type of class to convert the JSON:API object's data to
+	 * @return the JSON:API object's data as a specific instance type
+	 * @param <T> the type of instance to return
+	 * @throws HttpStatusException if the value is null
+	 */
 	public @NonNull <T> T readDataWithoutId(
 			JsonApiObject<JsonApiResource> jsonApiObj, Class<T> clazz
 	) throws HttpStatusException {
@@ -58,6 +85,15 @@ public class JsonApiService {
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Value cannot be null"));
 	}
 
+	/**
+	 * Transform the JSON:API resource into the provided instance type, excluding the ID
+	 * @param res the JSON:API resource to convert to a class instance
+	 * @param clazz the type of class to convert the JSON:API resource to
+	 * @return the JSON:API resource as a specific instance type
+	 * @param <T> the type of instance to return
+	 * @throws HttpStatusException if unable to convert the resource into the provided instance type, such as if the
+	 *             data is null
+	 */
 	public <T> Optional<T> readResourceWithoutId(
 			JsonApiResource res, Class<T> clazz
 	) throws HttpStatusException {
@@ -86,6 +122,15 @@ public class JsonApiService {
 		return readNullableValue(properties, clazz);
 	}
 
+	/**
+	 * Transform the JSON:API resource into the provided instance type, including the ID
+	 * @param res the JSON:API resource to convert to a class instance
+	 * @param clazz the type of class to convert the JSON:API resource to
+	 * @return the JSON:API resource as a specific instance type
+	 * @param <T> the type of instance to return
+	 * @throws HttpStatusException if unable to convert the resource into the provided instance type, such as if the
+	 *             data is null
+	 */
 	public <T extends JsonApiIdentifiable> Optional<T> readResourceWithId(
 			JsonApiResource res, Class<T> clazz
 	) throws HttpStatusException {
@@ -96,6 +141,14 @@ public class JsonApiService {
 				});
 	}
 
+	/**
+	 * Transform the JSON:API resource into the provided instance type, including the ID, throwing if the value is null
+	 * @param res the JSON:API resource to convert to a class instance
+	 * @param clazz the type of class to convert the JSON:API resource to
+	 * @return the JSON:API resource as a specific instance type
+	 * @param <T> the type of instance to return
+	 * @throws HttpStatusException if the value is null
+	 */
 	public @NonNull <T extends JsonApiIdentifiable> T readResourceWithIdOrThrow(
 			JsonApiResource res, Class<T> clazz
 	) throws HttpStatusException {
@@ -103,15 +156,31 @@ public class JsonApiService {
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Value cannot be null"));
 	}
 
+	/**
+	 * Read a map or null value into an instance of the provided class
+	 * @param map the map to convert to a class instance
+	 * @param clazz the type of class to convert the map to
+	 * @return the non-null instance value
+	 * @param <T> the type of instance to return
+	 * @throws HttpStatusException if the value is null
+	 */
 	public @NonNull <T> T readValue(Map<String, ?> map, Class<T> clazz) throws HttpStatusException {
 		return readNullableValue(map, clazz)
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "Value cannot be null"));
 	}
 
+	/**
+	 * Read a map or null value into an instance of the provided class
+	 * @param map the map to convert to a class instance
+	 * @param clazz the type of class to convert the map to
+	 * @return the instance value as an Optional
+	 * @param <T> the type of instance to return
+	 * @throws HttpStatusException if unable to convert the map into the provided instance type
+	 */
 	public <T> Optional<T> readNullableValue(Map<String, ?> map, Class<T> clazz) throws HttpStatusException {
 		try {
-			String jsonStr = jsonMapper.writeValueAsString(map);
-			T val = jsonMapper.readValue(jsonStr, clazz);
+			String jsonStr = map == null ? null : jsonMapper.writeValueAsString(map);
+			T val = jsonStr == null ? null : jsonMapper.readValue(jsonStr, clazz);
 			return Optional.ofNullable(val);
 		} catch (IOException e) {
 			//log.info("Unable to read nullable value", e);

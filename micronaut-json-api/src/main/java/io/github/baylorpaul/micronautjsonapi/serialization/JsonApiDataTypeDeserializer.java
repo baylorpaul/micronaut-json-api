@@ -71,6 +71,12 @@ public class JsonApiDataTypeDeserializer implements Deserializer<JsonApiDataType
 		return new JsonApiArray(l);
 	}
 
+	/**
+	 * Translate an object to JSON (JavaScript Object Notation)
+	 * @param obj the object to translate, or null
+	 * @return the object as a JSON string
+	 * @throws IOException if an unrecoverable error occurs
+	 */
 	public String toJson(Object obj) throws IOException {
 		return obj == null ? "null" : jsonMapper.writeValueAsString(obj);
 	}

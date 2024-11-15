@@ -21,6 +21,13 @@ import java.util.SequencedMap;
 @ReflectiveAccess
 public class JsonApiTopLevelResource extends JsonApiTopLevelObject<JsonApiResource> {
 
+	/**
+	 * Create a top-level JSON:API resource
+	 * @param meta a meta object that contains non-standard meta-information, if any
+	 * @param data the document's "primary data", if any
+	 * @param errors error objects, if any
+	 * @param included an array of resource objects that are related to the primary data and/or each other ("included resources")
+	 */
 	@Builder(builderMethodName = "topLevelResourceBuilder")
 	public JsonApiTopLevelResource(
 			@Nullable SequencedMap<String, Object> meta,

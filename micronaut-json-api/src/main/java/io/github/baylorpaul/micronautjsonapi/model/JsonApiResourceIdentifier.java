@@ -25,6 +25,13 @@ public class JsonApiResourceIdentifier implements JsonApiDataType {
 	 */
 	private @Nullable String id;
 
+	/**
+	 * Create a top-level JSON:API resource identifier
+	 * @param type the resource type. Every resource object MUST contain a type member.
+	 * @param id the ID of the resource. This must be a string. Every resource object MUST contain an id member, except
+	 *              when the resource object originates at the client and represents a new resource to be created on the
+	 *              server.
+	 */
 	@Builder(builderMethodName = "idBuilder")
 	public JsonApiResourceIdentifier(String type, String id) {
 		this.type = type;

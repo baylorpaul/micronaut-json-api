@@ -11,16 +11,30 @@ import java.util.LinkedHashMap;
 import java.util.SequencedMap;
 import java.util.function.Function;
 
+/**
+ * A JSON:API representation of a page. This models a type that supports pagination operations.
+ * A Page is a result set associated with a particular Pageable that includes a calculation of the total size of page of
+ * records.
+ * @param <T> - The generic type
+ */
 @Serdeable
 @ReflectiveAccess
 public class JsonApiPage<T extends JsonApiResourceable> extends JsonApiSlice<T> {
 	private final Page<T> page;
 
+	/**
+	 * Create a JSON:API page
+	 * @param page a result set associated with a particular Pageable that includes a calculation of the total size of
+	 *                page of records.
+	 */
 	public JsonApiPage(Page<T> page) {
 		this(page, null);
 	}
 
 	/**
+	 * Create a JSON:API page
+	 * @param page a result set associated with a particular Pageable that includes a calculation of the total size of
+	 *                page of records.
 	 * @param findIncluded null for none, else a function to find included values for the collection of resources
 	 */
 	public JsonApiPage(Page<T> page, Function<Collection<? extends JsonApiResource>, JsonApiArray> findIncluded) {
@@ -34,6 +48,7 @@ public class JsonApiPage<T extends JsonApiResourceable> extends JsonApiSlice<T> 
 	}
 
 	/**
+	 * Find the total number of pages
 	 * @return The total number of pages
 	 */
 	@JsonIgnore
@@ -42,6 +57,7 @@ public class JsonApiPage<T extends JsonApiResourceable> extends JsonApiSlice<T> 
 	}
 
 	/**
+	 * Find the total size of the all records.
 	 * @return The total size of the all records.
 	 */
 	@JsonIgnore

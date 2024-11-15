@@ -7,6 +7,7 @@ public interface JsonApiDataTypeable {
 
 	/**
 	 * Map the resource or resources to the corresponding type containing only the "type" and "id" for each
+	 * @return a JSON:API resource identifier (type and id) or list of JSON:API resource identifiers
 	 */
 	JsonApiDataType toResourceIdOrIds();
 }
