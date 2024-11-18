@@ -14,6 +14,13 @@ repositories {
     // For this library
     maven {
         url = uri("https://maven.pkg.github.com/baylorpaul/micronaut-json-api")
+		// Even though the package is public, GitHub Packages does not have plans for anonymous access, so you'll still
+		// need to provide a GitHub PAT (public access token). Any token will do.
+        // https://github.com/orgs/community/discussions/26634#discussioncomment-8527086
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
     }
 }
 ```

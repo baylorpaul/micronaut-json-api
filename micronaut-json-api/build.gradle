@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     annotationProcessor("org.projectlombok:lombok")
+    // Include micronaut-http-server for JsonApiErrorResponseProcessor.java
     implementation("io.micronaut:micronaut-http-server")
     implementation("io.micronaut.data:micronaut-data-model")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
