@@ -5,9 +5,10 @@ plugins {
     id("io.micronaut.application") version "4.4.2"
     id("idea")
     id("maven-publish")
+    id("org.jreleaser") version "1.15.0"
 }
 
-version = '1.0.0'
+version = '1.0.1'
 group = 'io.github.baylorpaul'
 
 repositories {
@@ -55,28 +56,83 @@ micronaut {
     }
 }
 
-// Publish via GitHub Packages with e.g. GITHUB_ACTOR=myuser GITHUB_TOKEN=myPersonalAccessToken ./gradlew publish
 publishing {
     repositories {
         //mavenLocal()
         maven {
+            /*
+            name = "OSSRH"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+            */
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+        maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/baylorpaul/micronaut-json-api")
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
     publications {
-        //maven(MavenPublication) {
-        //    groupId = project.group
-        //    artifactId = project.name
+        maven(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
         //    version = project.version
-        //    from components.java
-        //}
+            from components.java
+
+            pom {
+                //name = "${project.group}:${project.name}"
+                name = 'Micronaut JSON:API'
+                description = 'A JSON:API library for Micronaut implementations'
+                url = 'https://github.com/baylorpaul/micronaut-json-api'
+                inceptionYear = '2024'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://raw.githubusercontent.com/baylorpaul/micronaut-json-api/main/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'baylorpaul'
+                        name = 'Paul Poley'
+                        //email = '141367555+baylorpaul@users.noreply.github.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/baylorpaul/micronaut-json-api.git'
+                    developerConnection = 'scm:git:ssh://github.com:baylorpaul/micronaut-json-api.git'
+                    url = 'https://github.com/baylorpaul/micronaut-json-api'
+                }
+            }
+        }
         gpr(MavenPublication) {
             from(components.java)
+        }
+    }
+}
+
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+    }
+    deploy {
+        maven {
+            // Portal Publisher API
+            mavenCentral {
+                sonatype {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('target/staging-deploy')
+                }
+            }
         }
     }
 }
