@@ -77,6 +77,32 @@ publishing {
         //}
         gpr(MavenPublication) {
             from(components.java)
+
+            pom {
+                //name = "${project.group}:${project.name}"
+                name = 'Micronaut JSON:API'
+                description = 'A JSON:API library for Micronaut implementations'
+                url = 'https://github.com/baylorpaul/micronaut-json-api'
+                inceptionYear = '2024'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://raw.githubusercontent.com/baylorpaul/micronaut-json-api/main/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'baylorpaul'
+                        name = 'Paul Poley'
+                        //email = '141367555+baylorpaul@users.noreply.github.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/baylorpaul/micronaut-json-api.git'
+                    developerConnection = 'scm:git:ssh://github.com:baylorpaul/micronaut-json-api.git'
+                    url = 'https://github.com/baylorpaul/micronaut-json-api'
+                }
+            }
         }
     }
 }
