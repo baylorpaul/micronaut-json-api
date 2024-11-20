@@ -1,6 +1,7 @@
 package io.github.baylorpaul.micronautjsonapi.model;
 
 import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiLinkType;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.annotation.ReflectiveAccess;
 import io.micronaut.serde.annotation.Serdeable;
@@ -29,6 +30,7 @@ public class JsonApiTopLevelObject<T extends JsonApiDataType> extends JsonApiObj
 
 	/**
 	 * Create a top-level JSON:API object
+	 * @param links links related to the top-level object
 	 * @param meta a meta object that contains non-standard meta-information, if any
 	 * @param data the document's "primary data", if any
 	 * @param errors error objects, if any
@@ -36,12 +38,13 @@ public class JsonApiTopLevelObject<T extends JsonApiDataType> extends JsonApiObj
 	 */
 	@Builder(builderMethodName = "topLevelBuilder")
 	public JsonApiTopLevelObject(
+			@Nullable SequencedMap<String, JsonApiLinkType> links,
 			@Nullable SequencedMap<String, Object> meta,
 			@Nullable T data,
 			Collection<JsonApiError> errors,
 			JsonApiArray included
 	) {
-		super(meta, data);
+		super(links, meta, data);
 		this.errors = errors;
 		this.included = included;
 	}

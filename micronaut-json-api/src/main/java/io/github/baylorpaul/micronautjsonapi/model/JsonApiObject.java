@@ -1,6 +1,7 @@
 package io.github.baylorpaul.micronautjsonapi.model;
 
 import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiLinkType;
 import io.github.baylorpaul.micronautjsonapi.serialization.JsonApiDataTypeDeserializer;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.annotation.ReflectiveAccess;
@@ -49,6 +50,8 @@ import java.util.SequencedMap;
 @AllArgsConstructor
 @ReflectiveAccess
 public class JsonApiObject<T extends JsonApiDataType> {
+	/** links related to the object */
+	private @Nullable SequencedMap<String, JsonApiLinkType> links;
 	/** a meta object that contains non-standard meta-information. */
 	private @Nullable SequencedMap<String, Object> meta;
 

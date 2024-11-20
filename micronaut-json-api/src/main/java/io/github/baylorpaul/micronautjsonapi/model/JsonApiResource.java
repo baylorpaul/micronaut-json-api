@@ -1,6 +1,7 @@
 package io.github.baylorpaul.micronautjsonapi.model;
 
 import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiLinkType;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.annotation.ReflectiveAccess;
 import io.micronaut.core.util.CollectionUtils;
@@ -21,7 +22,8 @@ public class JsonApiResource extends JsonApiResourceIdentifier {
 	private @Nullable SequencedMap<String, Object> attributes;
 	/** relationships between the resource and other resources. */
 	private @Nullable SequencedMap<String, JsonApiObject<? extends JsonApiDataType>> relationships;
-	//private @Nullable JsonApiLinks links;
+	/** links related to the resource */
+	private @Nullable SequencedMap<String, ? extends JsonApiLinkType> links;
 
 	/**
 	 * Create a JSON:API resource
@@ -31,12 +33,20 @@ public class JsonApiResource extends JsonApiResourceIdentifier {
 	 *              server.
 	 * @param attributes an attributes object representing some of the resource's data.
 	 * @param relationships relationships between the resource and other resources.
+	 * @param links links related to the resource
 	 */
 	@Builder
-	public JsonApiResource(String type, String id, SequencedMap<String, Object> attributes, SequencedMap<String, JsonApiObject<? extends JsonApiDataType>> relationships) {
+	public JsonApiResource(
+			String type,
+			String id,
+			SequencedMap<String, Object> attributes,
+			SequencedMap<String, JsonApiObject<? extends JsonApiDataType>> relationships,
+			SequencedMap<String, ? extends JsonApiLinkType> links
+	) {
 		super(type, id);
 		this.attributes = attributes;
 		this.relationships = relationships;
+		this.links = links;
 	}
 
 	/**

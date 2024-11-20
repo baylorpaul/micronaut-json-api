@@ -55,6 +55,7 @@ public interface JsonApiResourceable extends JsonApiIdentifiable {
 	private static JsonApiObject<? extends JsonApiDataType> toJsonApiObject(JsonApiDataTypeable entity) {
 		return new JsonApiObject<>(
 				null,
+				null,
 				entity == null ? null : entity.toResourceIdOrIds()
 		);
 	}

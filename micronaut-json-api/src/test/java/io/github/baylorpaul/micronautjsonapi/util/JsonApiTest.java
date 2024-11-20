@@ -6,6 +6,7 @@ import io.github.baylorpaul.micronautjsonapi.entity.PhysicalAddress;
 import io.github.baylorpaul.micronautjsonapi.entity.User;
 import io.github.baylorpaul.micronautjsonapi.model.*;
 import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiLinkType;
 import io.github.baylorpaul.micronautjsonapi.service.JsonApiService;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -16,9 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @MicronautTest
 public class JsonApiTest {
@@ -167,12 +166,14 @@ public class JsonApiTest {
 					"}" +
 				"}";
 		String metaJson = "\"meta\":{\"copyright\":\"Copyright 2024 Example Corp.\"}";
+		String linksJson = "\"links\":{\"related\":{\"href\": \"http://example.com/articles/1/comments\"}}";
 		String inputJson = "{" +
 					"\"data\":[{" +
 						dataJsonFields1 +
 						dataJsonFields2 +
 					"}]" +
 					"," + metaJson +
+					"," + linksJson +
 				"}";
 		String expectedJson = "{" +
 					"\"data\":[{" +
@@ -182,7 +183,7 @@ public class JsonApiTest {
 					"}]" +
 				"}";
 
-		JsonApiObject<JsonApiArray> body = fromJson(inputJson, JsonApiObject.class);
+		JsonApiTopLevelObject<JsonApiArray> body = fromJson(inputJson, JsonApiTopLevelObject.class);
 		Assertions.assertNotNull(body);
 		JsonApiArray topData = body.getData();
 		Assertions.assertNotNull(topData);
@@ -212,6 +213,12 @@ public class JsonApiTest {
 		Map<String, Object> meta = body.getMeta();
 		Assertions.assertNotNull(meta);
 		Assertions.assertEquals("Copyright 2024 Example Corp.", meta.get("copyright"));
+
+		Map<String, JsonApiLinkType> links = body.getLinks();
+		Assertions.assertNotNull(links);
+		JsonApiLinkType relatedLink = links.get("related");
+		Assertions.assertNotNull(relatedLink);
+		Assertions.assertEquals("http://example.com/articles/1/comments", relatedLink.toUri());
 
 		List<Article> articles = jsonApiService.readDataWithIds(body, Article.class);
 		Assertions.assertEquals(1, articles.size());
@@ -253,6 +260,51 @@ public class JsonApiTest {
 		Assertions.assertEquals(54L, user.getId());
 		Assertions.assertEquals("john@example.com", user.getEmail());
 		Assertions.assertEquals("John", user.getName());
+	}
+
+	/**
+	 * Ensure that a resource's "links" are serialized/deserialized appropriately
+	 */
+	@Test
+	public void testLinks() throws IOException {
+		String selfLinkStr = "http://example.com/articles/1/relationships/comments";
+
+		SequencedMap<String, Object> linkJsonObj = new LinkedHashMap<>();
+		linkJsonObj.put("href", "http://example.com/articles/1/comments");
+		linkJsonObj.put("describedby", "http://example.com/schemas/article-comments");
+		linkJsonObj.put("title", "Comments");
+		linkJsonObj.put("meta", Map.of("count", 10));
+
+		SequencedMap<String, Object> jsonLinks = new LinkedHashMap<>();
+		jsonLinks.put("self", selfLinkStr);
+		jsonLinks.put("otherLink", null);
+		jsonLinks.put("related", linkJsonObj);
+		String authorDataJson = "{" +
+				"\"type\":\"user\",\"id\":\"93\"" +
+				",\"links\":" + jsonMapper.writeValueAsString(jsonLinks) +
+				"}";
+
+		JsonApiResource res = fromJson(authorDataJson, JsonApiResource.class);
+		Assertions.assertNotNull(res);
+		Assertions.assertNotNull(res.getLinks());
+		Assertions.assertEquals(selfLinkStr, res.getLinks().get("self").toUri());
+		Assertions.assertTrue(res.getLinks().containsKey("otherLink"));
+		Assertions.assertNull(res.getLinks().get("otherLink"));
+
+		Object relatedLinkObj = res.getLinks().get("related");
+		Assertions.assertNotNull(relatedLinkObj);
+		if (relatedLinkObj instanceof JsonApiLinkObject linkObj) {
+			Assertions.assertEquals("http://example.com/articles/1/comments", linkObj.getHref());
+			Assertions.assertEquals("Comments", linkObj.getTitle());
+			Assertions.assertEquals("http://example.com/schemas/article-comments", linkObj.getDescribedby());
+			Assertions.assertNotNull(linkObj.getMeta());
+			Assertions.assertEquals(10, linkObj.getMeta().get("count"));
+		} else {
+			Assertions.fail("The 'related' entry was not mapped to the appropriate type");
+		}
+
+		// Now test serialization
+		Assertions.assertEquals(authorDataJson, toJson(res));
 	}
 
 	private <T> T fromJson(String str, Class<T> clazz) {

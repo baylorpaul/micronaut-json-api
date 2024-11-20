@@ -1,11 +1,14 @@
 package io.github.baylorpaul.micronautjsonapi.model;
 
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiLinkType;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.annotation.ReflectiveAccess;
 import io.micronaut.serde.annotation.Serdeable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.SequencedMap;
 
 /** A <a href="https://jsonapi.org/">JSON:API</a> error. */
 @Data
@@ -16,7 +19,8 @@ import lombok.experimental.SuperBuilder;
 public class JsonApiError {
 	/** a unique identifier for this particular occurrence of the problem. */
 	private @Nullable String id;
-	//private @Nullable JsonApiErrorLinks links;
+	/** links related to the error object */
+	private @Nullable SequencedMap<String, JsonApiLinkType> links;
 	/** the HTTP status code applicable to this problem, expressed as a string value. This SHOULD be provided. */
 	private @Nullable String status;
 	/** an application-specific error code, expressed as a string value. */
