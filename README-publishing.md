@@ -23,7 +23,7 @@ Generate the artifacts. We could make a separate publication, but we're reusing 
 Then copy the artifacts to a separate directory.
 Finally, sign the artifacts with ASCII signature files (.asc) and generate checksums (.sha1 and .md5):
 
-	./gradlew build generatePomFileForGprPublication
+	./gradlew clean build generatePomFileForGprPublication
 	rm -rf micronaut-json-api/build/publications/maven-central
 	mkdir -p micronaut-json-api/build/publications/maven-central/artifacts
 	cp micronaut-json-api/build/libs/* micronaut-json-api/build/publications/maven-central/artifacts/
