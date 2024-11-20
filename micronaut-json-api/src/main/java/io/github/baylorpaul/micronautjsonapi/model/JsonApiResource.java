@@ -23,7 +23,7 @@ public class JsonApiResource extends JsonApiResourceIdentifier {
 	/** relationships between the resource and other resources. */
 	private @Nullable SequencedMap<String, JsonApiObject<? extends JsonApiDataType>> relationships;
 	/** links related to the resource */
-	private @Nullable SequencedMap<String, ? extends JsonApiLinkType> links;
+	private @Nullable SequencedMap<String, JsonApiLinkType> links;
 
 	/**
 	 * Create a JSON:API resource
@@ -41,7 +41,7 @@ public class JsonApiResource extends JsonApiResourceIdentifier {
 			String id,
 			SequencedMap<String, Object> attributes,
 			SequencedMap<String, JsonApiObject<? extends JsonApiDataType>> relationships,
-			SequencedMap<String, ? extends JsonApiLinkType> links
+			SequencedMap<String, JsonApiLinkType> links
 	) {
 		super(type, id);
 		this.attributes = attributes;
