@@ -2,6 +2,15 @@
 
 A [JSON:API](https://jsonapi.org/) library for [Micronaut](https://micronaut.io/) implementations.
 
+## Features
+
+1. Entity mapping to JSON:API resource(s)
+2. A processor for an "include" query parameter. E.g. `?include=author.address,publishingCompany`
+3. Error response processor
+4. Page and Slice responses
+5. Deserializing "data" fields into corresponding JsonApiResource or JsonApiArray
+6. Transform JSON:API resource(s) into other Java classes, such as entities
+
 ## API implementation with JSON:API
 
 ### Setup
