@@ -2,6 +2,7 @@ package io.github.baylorpaul.micronautjsonapi.util;
 
 import io.github.baylorpaul.micronautjsonapi.identifiable.JsonApiResourceable;
 import io.github.baylorpaul.micronautjsonapi.model.*;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.http.HttpStatus;

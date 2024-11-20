@@ -1,6 +1,7 @@
 package io.github.baylorpaul.micronautjsonapi.identifiable;
 
 import io.github.baylorpaul.micronautjsonapi.model.*;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

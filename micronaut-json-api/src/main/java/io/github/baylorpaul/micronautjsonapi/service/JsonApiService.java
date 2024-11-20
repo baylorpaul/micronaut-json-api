@@ -2,7 +2,7 @@ package io.github.baylorpaul.micronautjsonapi.service;
 
 import io.github.baylorpaul.micronautjsonapi.identifiable.JsonApiIdentifiable;
 import io.github.baylorpaul.micronautjsonapi.model.JsonApiArray;
-import io.github.baylorpaul.micronautjsonapi.model.JsonApiDataType;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
 import io.github.baylorpaul.micronautjsonapi.model.JsonApiObject;
 import io.github.baylorpaul.micronautjsonapi.model.JsonApiResource;
 import io.micronaut.core.annotation.NonNull;

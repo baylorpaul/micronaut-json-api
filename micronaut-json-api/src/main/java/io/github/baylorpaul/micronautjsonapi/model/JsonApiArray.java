@@ -1,6 +1,7 @@
 package io.github.baylorpaul.micronautjsonapi.model;
 
 import io.github.baylorpaul.micronautjsonapi.identifiable.JsonApiResourceable;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
 import io.micronaut.core.annotation.ReflectiveAccess;
 import io.micronaut.serde.annotation.Serdeable;
 

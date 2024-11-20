@@ -1,4 +1,4 @@
-package io.github.baylorpaul.micronautjsonapi.model;
+package io.github.baylorpaul.micronautjsonapi.model.types;
 
 import io.micronaut.serde.annotation.Serdeable;
 

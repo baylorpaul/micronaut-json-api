@@ -5,6 +5,7 @@ import io.github.baylorpaul.micronautjsonapi.entity.GrantingToken;
 import io.github.baylorpaul.micronautjsonapi.entity.PhysicalAddress;
 import io.github.baylorpaul.micronautjsonapi.entity.User;
 import io.github.baylorpaul.micronautjsonapi.model.*;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
 import io.github.baylorpaul.micronautjsonapi.service.JsonApiService;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;

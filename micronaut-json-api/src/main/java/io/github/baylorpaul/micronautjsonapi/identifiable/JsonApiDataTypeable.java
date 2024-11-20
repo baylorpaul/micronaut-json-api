@@ -1,6 +1,6 @@
 package io.github.baylorpaul.micronautjsonapi.identifiable;
 
-import io.github.baylorpaul.micronautjsonapi.model.JsonApiDataType;
+import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
 
 /** An empty interface, allowing for a central type when "data.relationship" values may be a single entity or a list */
 public interface JsonApiDataTypeable {
