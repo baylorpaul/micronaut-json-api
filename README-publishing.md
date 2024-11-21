@@ -19,29 +19,30 @@ Update the `version` in `build.gradle`.
 
 ## Manual Upload
 
-Generate the artifacts. We could make a separate publication, but we're reusing the pom artifact that we're generating for GPR (GitHub Packages Repository).
+### Generate the artifacts
+
+We could make a separate publication, but we're reusing the pom artifact that we're generating for GPR (GitHub Packages Repository).
 Then copy the artifacts to a separate directory.
 Finally, sign the artifacts with ASCII signature files (.asc) and generate checksums (.sha1 and .md5):
 
 	./gradlew clean build generatePomFileForGprPublication
-	rm -rf micronaut-json-api/build/publications/maven-central
-	mkdir -p micronaut-json-api/build/publications/maven-central/artifacts
-	cp micronaut-json-api/build/libs/* micronaut-json-api/build/publications/maven-central/artifacts/
-	cp micronaut-json-api/build/publications/gpr/pom-default.xml micronaut-json-api/build/publications/maven-central/artifacts/
-	pushd micronaut-json-api/build/publications/maven-central/artifacts
-	VERSION=$(ls *-sources.jar | sed 's/.*micronaut-json-api-\(.*\)-sources.*/\1/')
-	rm *-runner.jar
-	mv pom-default.xml micronaut-json-api-$VERSION.pom
+	GROUPDIR=io/github/baylorpaul
+	LIBNAME=micronaut-json-api
+	VERSION=$(ls $LIBNAME/build/libs/*-sources.jar | xargs -n 1 basename | sed 's/.*-\([\.0-9A-Za-z]*\)-sources.*/\1/')
+	mkdir -p $LIBNAME/build/publications/maven-central/artifacts
+	find $LIBNAME/build/libs -type f -name "$LIBNAME-$VERSION.jar" -or -name "$LIBNAME-$VERSION-javadoc.jar" -or -name "$LIBNAME-$VERSION-sources.jar" | xargs -I {} cp {} $LIBNAME/build/publications/maven-central/artifacts/
+	cp $LIBNAME/build/publications/gpr/pom-default.xml $LIBNAME/build/publications/maven-central/artifacts/$LIBNAME-$VERSION.pom
+	pushd $LIBNAME/build/publications/maven-central/artifacts
 	for FILE in *; do
 		gpg --armor --detach-sign $FILE
 		sha1sum $FILE | cut -d ' ' -f 1 > $FILE.sha1
 		md5sum $FILE | cut -d ' ' -f 1 > $FILE.md5
 	; done
 	cd ..
-	mkdir -p io/github/baylorpaul/micronaut-json-api/$VERSION
-	mv artifacts/* io/github/baylorpaul/micronaut-json-api/$VERSION/
+	mkdir -p $GROUPDIR/$LIBNAME/$VERSION
+	mv artifacts/* $GROUPDIR/$LIBNAME/$VERSION/
 	rm -rf artifacts
-	zip micronaut-json-api-$VERSION.zip * io/github/baylorpaul/micronaut-json-api/$VERSION/*
+	zip $LIBNAME-$VERSION.zip * $GROUPDIR/$LIBNAME/$VERSION/*
 	rm -rf io
 	popd
 
