@@ -32,5 +32,5 @@ public class JsonApiError {
 	/** an object containing references to the primary source of the error. It SHOULD include at least one member or be omitted. */
 	private @Nullable JsonApiErrorSource source;
 	/** a meta object containing non-standard meta-information about the error. */
-	private @Nullable Object meta;
+	private @Nullable SequencedMap<String, Object> meta;
 }
