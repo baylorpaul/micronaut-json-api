@@ -94,7 +94,7 @@ The `@Body` may be mapped to an entity or a different DTO.
 @Post("/users")
 @Status(HttpStatus.CREATED)
 public JsonApiTopLevelResource create(@Body JsonApiObject<JsonApiResource> body) {
-	UserCreation dto = jsonApiService.readDataWithoutId(body, UserCreation.class);
+	UserCreation dto = JsonApiUtil.readDataWithoutId(jsonMapper, body, UserCreation.class);
 	User newUser = userRestService.createUser(dto);
 	return newUser.toTopLevelResource();
 }
@@ -122,7 +122,7 @@ public JsonApiTopLevelResource create(Principal principal, @Body JsonApiObject<J
 	SecurityUtil.throwIfNotAccessTokenAuthorization(principal);
 
 	long userId = SecurityUtil.requireUserId(principal);
-	GrantingToken dto = jsonApiService.readDataWithoutId(body, GrantingToken.class);
+	GrantingToken dto = JsonApiUtil.readDataWithoutId(jsonMapper, body, GrantingToken.class);
 	TokenCreation tokenCreation = grantingTokenRestService.createToken(userId, dto);
 
 	JsonApiResource res = tokenCreation.grantingToken().toResource();
@@ -150,7 +150,7 @@ public Optional<JsonApiTopLevelResource> update(long id, Principal principal, @B
 ```
 Inside `updateUser()`, you may map the provided `JsonApiResource` to an entity or DTO via the following as long as `res.getAttributes()` is not null:
 ```java
-User dto = jsonApiService.readValue(res.getAttributes(), User.class);
+User dto = JsonApiUtil.readValue(jsonMapper, res.getAttributes(), User.class);
 ```
 
 ### Delete a record

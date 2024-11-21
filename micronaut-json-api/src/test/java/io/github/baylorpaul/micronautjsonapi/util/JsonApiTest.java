@@ -7,7 +7,6 @@ import io.github.baylorpaul.micronautjsonapi.entity.User;
 import io.github.baylorpaul.micronautjsonapi.model.*;
 import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
 import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiLinkType;
-import io.github.baylorpaul.micronautjsonapi.service.JsonApiService;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -24,9 +23,6 @@ public class JsonApiTest {
 
 	@Inject
 	private JsonMapper jsonMapper;
-
-	@Inject
-	private JsonApiService jsonApiService;
 
 	@Test
 	public void testJson() {
@@ -113,7 +109,7 @@ public class JsonApiTest {
 		Assertions.assertEquals("grantingToken", res.getType());
 		Assertions.assertEquals("333", res.getId());
 
-		GrantingToken grantingToken2 = jsonApiService.readResourceWithId(res, GrantingToken.class)
+		GrantingToken grantingToken2 = JsonApiUtil.readResourceWithId(jsonMapper, res, GrantingToken.class)
 				.orElseThrow(() -> new RuntimeException("Expected to find granting token"));
 
 		Assertions.assertEquals(333L, grantingToken2.getId());
@@ -136,7 +132,7 @@ public class JsonApiTest {
 		Assertions.assertEquals("user", userRes.getType());
 		Assertions.assertEquals("555", userRes.getId());
 
-		User user2 = jsonApiService.readResourceWithId(userRes, User.class)
+		User user2 = JsonApiUtil.readResourceWithId(jsonMapper, userRes, User.class)
 				.orElseThrow(() -> new RuntimeException("Expected to find user"));
 		Assertions.assertEquals(555L, user2.getId());
 		Assertions.assertEquals("joe@example.com", user2.getEmail());
@@ -220,7 +216,7 @@ public class JsonApiTest {
 		Assertions.assertNotNull(relatedLink);
 		Assertions.assertEquals("http://example.com/articles/1/comments", relatedLink.toUri());
 
-		List<Article> articles = jsonApiService.readDataWithIds(body, Article.class);
+		List<Article> articles = JsonApiUtil.readDataWithIds(jsonMapper, body, Article.class);
 		Assertions.assertEquals(1, articles.size());
 		Article article = articles.getFirst();
 		Assertions.assertEquals("10", article.getId());
@@ -255,7 +251,7 @@ public class JsonApiTest {
 		Assertions.assertEquals("user", userData.getType());
 		Assertions.assertEquals("54", userData.getId());
 
-		User user = jsonApiService.readDataWithId(body, User.class);
+		User user = JsonApiUtil.readDataWithId(jsonMapper, body, User.class);
 		Assertions.assertNotNull(user);
 		Assertions.assertEquals(54L, user.getId());
 		Assertions.assertEquals("john@example.com", user.getEmail());
