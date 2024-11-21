@@ -18,7 +18,7 @@ A [JSON:API](https://jsonapi.org/) library for [Micronaut](https://micronaut.io/
 #### Add Dependency to your `build.gradle`
 ```groovy
 dependencies {
-    implementation("io.github.baylorpaul:micronaut-json-api:1.1.0")
+    implementation("io.github.baylorpaul:micronaut-json-api:2.0.0")
 }
 ```
 
@@ -29,6 +29,52 @@ In your `application.properties`, set:
 
 This will continue omitting null and Optional.empty(), but for the JSON:API spec, include empty collections.
 I.e. it is desirable to have `"attributes":{}` instead of excluding `attributes`.
+
+### Update entities
+
+For entities you plan to expose to the API, add `implements JsonApiResourceable` to the class. And then add the appropriate methods. E.g.
+```java
+@MappedEntity
+@Data
+@Builder(toBuilder = true)
+@Serdeable.Deserializable
+@NoArgsConstructor
+@AllArgsConstructor
+@ReflectiveAccess
+public class Article implements JsonApiResourceable {
+	private @Id @GeneratedValue @NonNull long id;
+	private @Relation(Relation.Kind.MANY_TO_ONE) User author;
+	private @Relation(Relation.Kind.ONE_TO_MANY) List<PhysicalAddress> addresses;
+
+	@Override
+	public String toResourceType() {
+		return "article";
+	}
+
+	@Override
+	public String toJsonApiId() {
+		return Long.toString(id);
+	}
+
+	@Override
+	public void applyJsonApiId(String jsonApiId) {
+		setId(jsonApiId == null ? 0L : Long.parseLong(jsonApiId));
+	}
+
+	@Override
+	public SequencedMap<String, Object> toJsonApiAttributes() {
+		return new LinkedHashMap<>();
+	}
+
+	@Override
+	public SequencedMap<String, ? extends JsonApiDataTypeable> toRelationships() {
+		return new TreeMap<>(Map.of(
+				"addresses", new JsonApiArrayable(addresses),
+				"author", author
+		));
+	}
+}
+```
 
 ### Retrieve a record
 
