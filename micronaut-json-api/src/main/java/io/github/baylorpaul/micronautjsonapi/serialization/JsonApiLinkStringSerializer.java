@@ -1,6 +1,7 @@
 package io.github.baylorpaul.micronautjsonapi.serialization;
 
 import io.github.baylorpaul.micronautjsonapi.model.JsonApiLinkString;
+import io.github.baylorpaul.micronautjsonapi.util.JsonApiSerdeUtil;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.type.Argument;
 import io.micronaut.serde.Encoder;
@@ -21,6 +22,6 @@ public class JsonApiLinkStringSerializer implements Serializer<JsonApiLinkString
 			@NonNull Encoder encoder, @NonNull EncoderContext context,
 			@NonNull Argument<? extends JsonApiLinkString> type, @NonNull JsonApiLinkString value
 	) throws IOException {
-		encoder.encodeString(value.getUri());
+		encoder.encodeString(JsonApiSerdeUtil.serializeJsonApiLinkString(value));
 	}
 }

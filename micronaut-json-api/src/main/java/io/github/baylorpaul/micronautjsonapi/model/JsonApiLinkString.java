@@ -9,7 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** A <a href="https://jsonapi.org/format/#document-links">JSON:API Link string</a>. */
+/**
+ * A <a href="https://jsonapi.org/format/#document-links">JSON:API Link string</a>.
+ * This is used instead of a java.lang.String so that we have a common interface (JsonApiLinkType) with
+ * JsonApiLinkObject.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
