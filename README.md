@@ -208,3 +208,8 @@ public HttpResponse<?> delete(long id, Principal principal) {
 	// delete the record
 }
 ```
+
+## Need a TypeScript client?
+
+If you're looking for a TypeScript client, consider using [JSON:API Bridge](https://github.com/baylorpaul/json-api-bridge).
+The interfaces and types are modeled after the DTOs in this project.
