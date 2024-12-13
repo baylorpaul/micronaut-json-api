@@ -22,11 +22,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @ReflectiveAccess
 public class TokenReferencingEntity implements JsonApiResourceable {
-	private @Id @NonNull String id;
-	private @Relation(Relation.Kind.MANY_TO_ONE) GrantingToken familyGrantingToken;
-
 	@Override
 	public String toResourceType() {
 		return "tokenReferencingEntity";
 	}
+
+	private @Id @NonNull String id;
+	private @Relation(Relation.Kind.MANY_TO_ONE) GrantingToken familyGrantingToken;
 }

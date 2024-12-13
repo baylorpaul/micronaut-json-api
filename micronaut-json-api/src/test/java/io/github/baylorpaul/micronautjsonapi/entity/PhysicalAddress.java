@@ -24,6 +24,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @ReflectiveAccess
 public class PhysicalAddress implements JsonApiResourceable {
+	@Override
+	public String toResourceType() {
+		return "physicalAddress";
+	}
 
 	private @Id @GeneratedValue @NonNull long id;
 	private @Nullable String line1;
@@ -34,9 +38,4 @@ public class PhysicalAddress implements JsonApiResourceable {
 	private @Nullable String country;
 	private @GeneratedValue Instant created;
 	private @GeneratedValue Instant updated;
-
-	@Override
-	public String toResourceType() {
-		return "physicalAddress";
-	}
 }

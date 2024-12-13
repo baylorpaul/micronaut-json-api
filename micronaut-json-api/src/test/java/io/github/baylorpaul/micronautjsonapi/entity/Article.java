@@ -24,12 +24,12 @@ import java.util.List;
 @AllArgsConstructor
 @ReflectiveAccess
 public class Article implements JsonApiResourceable {
-	private @Id @NonNull String id;
-	private @Relation(Relation.Kind.MANY_TO_ONE) User author;
-	private @Relation(Relation.Kind.ONE_TO_MANY) List<PhysicalAddress> addresses;
-
 	@Override
 	public String toResourceType() {
 		return "article";
 	}
+
+	private @Id @NonNull String id;
+	private @Relation(Relation.Kind.MANY_TO_ONE) User author;
+	private @Relation(Relation.Kind.ONE_TO_MANY) List<PhysicalAddress> addresses;
 }

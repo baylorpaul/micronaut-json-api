@@ -28,6 +28,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @ReflectiveAccess
 public class User implements JsonApiResourceable {
+	@Override
+	public String toResourceType() {
+		return "user";
+	}
 
 	private @Id @GeneratedValue @NonNull long id;
 	private @NotBlank String email;
@@ -37,9 +41,4 @@ public class User implements JsonApiResourceable {
 	private boolean emailVerified;
 	private @GeneratedValue Instant created;
 	private @GeneratedValue Instant updated;
-
-	@Override
-	public String toResourceType() {
-		return "user";
-	}
 }

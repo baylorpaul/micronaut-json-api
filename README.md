@@ -42,15 +42,15 @@ For entities you plan to expose to the API, add `implements JsonApiResourceable`
 @AllArgsConstructor
 @ReflectiveAccess
 public class Article implements JsonApiResourceable {
-	private @Id @GeneratedValue @NonNull long id;
-	private @JsonIgnore @Nullable String topSecretValue;
-	private @Relation(Relation.Kind.MANY_TO_ONE) User author;
-	private @Relation(Relation.Kind.ONE_TO_MANY) List<PhysicalAddress> addresses;
-
 	@Override
 	public String toResourceType() {
 		return "article";
 	}
+
+	private @Id @GeneratedValue @NonNull long id;
+	private @JsonIgnore @Nullable String topSecretValue;
+	private @Relation(Relation.Kind.MANY_TO_ONE) User author;
+	private @Relation(Relation.Kind.ONE_TO_MANY) List<PhysicalAddress> addresses;
 }
 ```
 

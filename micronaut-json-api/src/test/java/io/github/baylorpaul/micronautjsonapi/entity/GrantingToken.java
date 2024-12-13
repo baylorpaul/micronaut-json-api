@@ -30,6 +30,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @ReflectiveAccess
 public class GrantingToken implements JsonApiResourceable {
+	@Override
+	public String toResourceType() {
+		return "grantingToken";
+	}
 
 	private @Id @GeneratedValue @NonNull long id;
 	private @Relation(Relation.Kind.MANY_TO_ONE) User user;
@@ -40,9 +44,4 @@ public class GrantingToken implements JsonApiResourceable {
 	private @Nullable Instant expirationDate;
 	private @GeneratedValue Instant created;
 	private @GeneratedValue Instant updated;
-
-	@Override
-	public String toResourceType() {
-		return "grantingToken";
-	}
 }
