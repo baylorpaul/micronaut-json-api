@@ -16,8 +16,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 
 /**
  * A user of the platform
@@ -53,17 +51,5 @@ public class User implements JsonApiResourceable {
 	@Override
 	public void applyJsonApiId(String jsonApiId) {
 		setId(jsonApiId == null ? 0L : Long.parseLong(jsonApiId));
-	}
-
-	@Override
-	public SequencedMap<String, Object> toJsonApiAttributes() {
-		SequencedMap<String, Object> attrs = new LinkedHashMap<>();
-		attrs.put("email", email);
-		attrs.put("name", name);
-		attrs.put("enabled", enabled);
-		attrs.put("emailVerified", emailVerified);
-		attrs.put("created", created);
-		attrs.put("updated", updated);
-		return attrs;
 	}
 }

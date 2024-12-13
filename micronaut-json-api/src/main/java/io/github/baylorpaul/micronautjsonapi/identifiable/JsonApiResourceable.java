@@ -1,11 +1,13 @@
 package io.github.baylorpaul.micronautjsonapi.identifiable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.baylorpaul.micronautjsonapi.model.*;
 import io.github.baylorpaul.micronautjsonapi.model.types.JsonApiDataType;
+import io.micronaut.core.beans.BeanWrapper;
+import io.micronaut.data.annotation.Id;
+import io.micronaut.data.annotation.Relation;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.SequencedMap;
+import java.util.*;
 
 /**
  * An entity that may be transformed into a JSON:API resource
@@ -23,14 +25,58 @@ public interface JsonApiResourceable extends JsonApiIdentifiable {
 	 * Provide a map of attributes that describe the resources, with keys such as "email", "name", etc.
 	 * @return a map of attributes that describe the resources
 	 */
-	SequencedMap<String, Object> toJsonApiAttributes();
+	default SequencedMap<String, Object> toJsonApiAttributes() {
+		final BeanWrapper<JsonApiResourceable> wrapper = BeanWrapper.getWrapper(this);
+		final SequencedMap<String, Object> attrs = new LinkedHashMap<>();
+		wrapper.getBeanProperties().forEach(bp -> {
+			boolean isId = bp.getDeclaredAnnotation(Id.class) != null;
+			boolean isRelation = bp.getDeclaredAnnotation(Relation.class) != null;
+			boolean ignore = bp.getDeclaredAnnotation(JsonIgnore.class) != null;
+			Object value = bp.get(this);
+			if (!isId && !isRelation && !ignore) {
+				attrs.put(bp.getName(), value);
+			}
+		});
+		return attrs;
+	}
 
 	/**
 	 * Find the relationship entities, in a map with consistently ordered keys if there are multiple entries
 	 * @return the relationship entities in a map
 	 */
-	default SequencedMap<String, ? extends JsonApiDataTypeable> toRelationships() {
-		return null;
+	default SequencedMap<String, JsonApiDataTypeable> toRelationships() {
+		final BeanWrapper<JsonApiResourceable> wrapper = BeanWrapper.getWrapper(this);
+		final SequencedMap<String, JsonApiDataTypeable> relationships = new LinkedHashMap<>();
+		wrapper.getBeanProperties().forEach(bp -> {
+			boolean isId = bp.getDeclaredAnnotation(Id.class) != null;
+			boolean isRelation = bp.getDeclaredAnnotation(Relation.class) != null;
+			boolean ignore = bp.getDeclaredAnnotation(JsonIgnore.class) != null;
+			Class<?> type = bp.getType();
+			Object value = bp.get(this);
+			if (!isId && isRelation && !ignore) {
+				if (JsonApiDataTypeable.class.isAssignableFrom(type)) {
+					relationships.put(bp.getName(), (JsonApiDataTypeable) value);
+				} else if (Collection.class.isAssignableFrom(type)) {
+					JsonApiArrayable arrayable = mapToJsonApiArrayable((Collection<?>) value);
+					relationships.put(bp.getName(), arrayable);
+				}
+			}
+		});
+		return relationships;
+	}
+
+	private static JsonApiArrayable mapToJsonApiArrayable(Collection<?> collection) {
+		JsonApiArrayable arrayable = null;
+		if (collection != null) {
+			List<JsonApiResourceable> list = new ArrayList<>(collection.size());
+			collection.forEach(v -> {
+				if (v == null || v instanceof JsonApiResourceable) {
+					list.add((JsonApiResourceable) v);
+				}
+			});
+			arrayable = new JsonApiArrayable(list);
+		}
+		return arrayable;
 	}
 
 	/**

@@ -13,8 +13,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 
 /**
  * A physical address location such as a mailing address or billing address.
@@ -50,19 +48,5 @@ public class PhysicalAddress implements JsonApiResourceable {
 	@Override
 	public void applyJsonApiId(String jsonApiId) {
 		setId(jsonApiId == null ? 0L : Long.parseLong(jsonApiId));
-	}
-
-	@Override
-	public SequencedMap<String, Object> toJsonApiAttributes() {
-		SequencedMap<String, Object> attrs = new LinkedHashMap<>();
-		attrs.put("line1", line1);
-		attrs.put("line2", line2);
-		attrs.put("locality", locality);
-		attrs.put("region", region);
-		attrs.put("postalCode", postalCode);
-		attrs.put("country", country);
-		attrs.put("created", created);
-		attrs.put("updated", updated);
-		return attrs;
 	}
 }

@@ -5,7 +5,10 @@ import io.github.baylorpaul.micronautjsonapi.identifiable.JsonApiResourceable;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.annotation.ReflectiveAccess;
-import io.micronaut.data.annotation.*;
+import io.micronaut.data.annotation.GeneratedValue;
+import io.micronaut.data.annotation.Id;
+import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.Relation;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -14,10 +17,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.SequencedMap;
-import java.util.TreeMap;
 
 /**
  * Granting tokens, such as (1) refresh tokens that may generate a new access token when an older access token expires,
@@ -55,22 +54,5 @@ public class GrantingToken implements JsonApiResourceable {
 	@Override
 	public void applyJsonApiId(String jsonApiId) {
 		setId(jsonApiId == null ? 0L : Long.parseLong(jsonApiId));
-	}
-
-	@Override
-	public SequencedMap<String, Object> toJsonApiAttributes() {
-		SequencedMap<String, Object> attrs = new LinkedHashMap<>();
-		attrs.put("comment", comment);
-		attrs.put("revoked", revoked);
-		attrs.put("lastUsedDate", lastUsedDate);
-		attrs.put("expirationDate", expirationDate);
-		attrs.put("created", created);
-		attrs.put("updated", updated);
-		return attrs;
-	}
-
-	@Override
-	public SequencedMap<String, JsonApiResourceable> toRelationships() {
-		return new TreeMap<>(Map.of("user", user));
 	}
 }

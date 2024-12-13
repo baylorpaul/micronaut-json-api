@@ -43,6 +43,7 @@ For entities you plan to expose to the API, add `implements JsonApiResourceable`
 @ReflectiveAccess
 public class Article implements JsonApiResourceable {
 	private @Id @GeneratedValue @NonNull long id;
+	private @JsonIgnore @Nullable String topSecretValue;
 	private @Relation(Relation.Kind.MANY_TO_ONE) User author;
 	private @Relation(Relation.Kind.ONE_TO_MANY) List<PhysicalAddress> addresses;
 
@@ -60,31 +61,19 @@ public class Article implements JsonApiResourceable {
 	public void applyJsonApiId(String jsonApiId) {
 		setId(jsonApiId == null ? 0L : Long.parseLong(jsonApiId));
 	}
-
-	@Override
-	public SequencedMap<String, Object> toJsonApiAttributes() {
-		return new LinkedHashMap<>();
-	}
-
-	@Override
-	public SequencedMap<String, ? extends JsonApiDataTypeable> toRelationships() {
-		return new TreeMap<>(Map.of(
-				"addresses", new JsonApiArrayable(addresses),
-				"author", author
-		));
-	}
 }
 ```
 
 ### Retrieve a record
 
-See the samples in the test packages, such as `User.java` or `GrantingToken.java`. For entities that you want to expose to
-your API:
+See the samples in the test packages, such as `User.java` or `GrantingToken.java`. For entities that you want to expose
+to your API:
 1. Implement the JsonApiResourceable interface on your entity.
 2. Ensure the value in `toResourceType()` is unique.
-3. Expose the publicly accessible attributes in the `toJsonApiAttributes()` method.
-4. If applicable, implement the `toRelationships()` method.
-5. In your controller method, find the result, and map it to a `JsonApiTopLevelResource` via `JsonApiResourceable::toTopLevelResource`. E.g.
+3. Apply the `@Id` annotation to your ID field. This will hide it from the JSON:API attributes.
+4. Apply the `@Relationship` annotation to each relationship field.
+5. Add the `@JsonIgnore` annotation to fields you do not want to expose as JSON:API attributes or relationships.
+6. In your controller method, find the result, and map it to a `JsonApiTopLevelResource` via `JsonApiResourceable::toTopLevelResource`. E.g.
 	```java
 	@Secured(SecurityRule.IS_AUTHENTICATED)
 	@Get("/users/{id}")

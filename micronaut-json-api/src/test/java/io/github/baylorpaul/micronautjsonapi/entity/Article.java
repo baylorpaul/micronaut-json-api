@@ -1,7 +1,5 @@
 package io.github.baylorpaul.micronautjsonapi.entity;
 
-import io.github.baylorpaul.micronautjsonapi.identifiable.JsonApiArrayable;
-import io.github.baylorpaul.micronautjsonapi.identifiable.JsonApiDataTypeable;
 import io.github.baylorpaul.micronautjsonapi.identifiable.JsonApiResourceable;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.ReflectiveAccess;
@@ -13,7 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * A dummy entity used to test multi-depth JSON:API paths to "include". E.g. if the API method is provided an "include"
@@ -43,18 +41,5 @@ public class Article implements JsonApiResourceable {
 	@Override
 	public void applyJsonApiId(String jsonApiId) {
 		setId(jsonApiId == null ? "0" : jsonApiId);
-	}
-
-	@Override
-	public SequencedMap<String, Object> toJsonApiAttributes() {
-		return new LinkedHashMap<>();
-	}
-
-	@Override
-	public SequencedMap<String, ? extends JsonApiDataTypeable> toRelationships() {
-		return new TreeMap<>(Map.of(
-				"addresses", new JsonApiArrayable(addresses),
-				"author", author
-		));
 	}
 }

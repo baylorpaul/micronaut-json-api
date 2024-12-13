@@ -154,11 +154,11 @@ public class JsonApiTest {
 		String dataJsonFields1 = "\"type\":\"article\"," +
 				"\"id\":\"10\",";
 		String dataJsonFields2 = "\"relationships\":{" +
-					"\"addresses\":{" +
-						"\"data\":" + addressesDataJson +
-					"}," +
 					"\"author\":{" +
 						"\"data\":" + authorDataJson +
+					"}," +
+					"\"addresses\":{" +
+						"\"data\":" + addressesDataJson +
 					"}" +
 				"}";
 		String metaJson = "\"meta\":{\"copyright\":\"Copyright 2024 Example Corp.\"}";
@@ -225,6 +225,7 @@ public class JsonApiTest {
 		Assertions.assertEquals(9L, author.getId());
 
 		List<PhysicalAddress> addrs = article.getAddresses();
+		Assertions.assertNotNull(addrs);
 		Assertions.assertEquals(2, addrs.size());
 		PhysicalAddress addr1 = addrs.get(0);
 		PhysicalAddress addr2 = addrs.get(1);
