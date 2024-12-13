@@ -42,14 +42,4 @@ public class User implements JsonApiResourceable {
 	public String toResourceType() {
 		return "user";
 	}
-
-	@Override
-	public String toJsonApiId() {
-		return Long.toString(id);
-	}
-
-	@Override
-	public void applyJsonApiId(String jsonApiId) {
-		setId(jsonApiId == null ? 0L : Long.parseLong(jsonApiId));
-	}
 }

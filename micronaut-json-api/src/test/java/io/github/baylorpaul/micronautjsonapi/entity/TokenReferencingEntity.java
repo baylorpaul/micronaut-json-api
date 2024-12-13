@@ -29,14 +29,4 @@ public class TokenReferencingEntity implements JsonApiResourceable {
 	public String toResourceType() {
 		return "tokenReferencingEntity";
 	}
-
-	@Override
-	public String toJsonApiId() {
-		return id;
-	}
-
-	@Override
-	public void applyJsonApiId(String jsonApiId) {
-		setId(jsonApiId == null ? "0" : jsonApiId);
-	}
 }

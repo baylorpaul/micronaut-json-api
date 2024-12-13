@@ -39,14 +39,4 @@ public class PhysicalAddress implements JsonApiResourceable {
 	public String toResourceType() {
 		return "physicalAddress";
 	}
-
-	@Override
-	public String toJsonApiId() {
-		return Long.toString(id);
-	}
-
-	@Override
-	public void applyJsonApiId(String jsonApiId) {
-		setId(jsonApiId == null ? 0L : Long.parseLong(jsonApiId));
-	}
 }

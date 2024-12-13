@@ -32,14 +32,4 @@ public class Article implements JsonApiResourceable {
 	public String toResourceType() {
 		return "article";
 	}
-
-	@Override
-	public String toJsonApiId() {
-		return id;
-	}
-
-	@Override
-	public void applyJsonApiId(String jsonApiId) {
-		setId(jsonApiId == null ? "0" : jsonApiId);
-	}
 }

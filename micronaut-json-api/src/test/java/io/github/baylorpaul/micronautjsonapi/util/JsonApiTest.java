@@ -82,12 +82,12 @@ public class JsonApiTest {
 	@Test
 	public void testWriteReadJsonApiTopLevelArray() {
 		User user1 = User.builder()
-				.id(555)
+				.id(555L)
 				.email("joe@example.com")
 				.name("Joe")
 				.build();
 		GrantingToken gt = GrantingToken.builder()
-				.id(333)
+				.id(333L)
 				.user(user1)
 				.token("abcdef")
 				.revoked(false)
