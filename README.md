@@ -81,8 +81,10 @@ to your API:
 As documented in [JSON:API's Inclusion of Related Resources](https://jsonapi.org/format/#fetching-includes), "an endpoint MAY also support an `include` query parameter to allow the client to customize which related resources should be returned." 
 To fulfill this, use `JsonApiIncludeProcessor`. E.g.
 ```java
-List<RelationshipRetriever> supportedIncludePaths = buildEmptyRelationshipRetrievers(
-	"author", "author.address", "publishingCompany"
+List<RelationshipRetriever> supportedIncludePaths = Arrays.asList(
+		new RelationshipRetriever("author", ids -> userRepo.findByIdIn(ids)),
+		new RelationshipRetriever("author.address", ids -> physicalAddressRepo.findByIdIn(ids)),
+		new RelationshipRetriever("publishingCompany", ids -> companyRepo.findByIdIn(ids))
 );
 JsonApiIncludeProcessor includeProcessor = new JsonApiIncludeProcessor(includeQueryParameter, supportedIncludePaths);
 ```
