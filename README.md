@@ -18,7 +18,7 @@ A [JSON:API](https://jsonapi.org/) library for [Micronaut](https://micronaut.io/
 #### Add Dependency to your `build.gradle`
 ```groovy
 dependencies {
-    implementation("io.github.baylorpaul:micronaut-json-api:2.0.0")
+    implementation("io.github.baylorpaul:micronaut-json-api:3.0.0")
 }
 ```
 
