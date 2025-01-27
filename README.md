@@ -32,7 +32,7 @@ I.e. it is desirable to have `"attributes":{}` instead of excluding `attributes`
 
 ### Update entities
 
-For entities you plan to expose to the API, add `implements JsonApiResourceable` to the class. And then add the appropriate methods. E.g.
+For entities you plan to expose to the API, add `implements JsonApiResourceable` to the class. E.g.
 ```java
 @MappedEntity
 @Data
