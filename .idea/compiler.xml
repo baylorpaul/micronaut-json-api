@@ -47,4 +47,11 @@
     </annotationProcessing>
     <bytecodeTargetLevel target="21" />
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="micronaut-json-api.micronaut-json-api" options="-parameters -Amicronaut.processing.incremental=true -Amicronaut.processing.annotations=io.github.baylorpaul.micronautjsonapi.* -Amicronaut.processing.group=io.github.baylorpaul -Amicronaut.processing.module=micronaut-json-api" />
+      <module name="micronaut-json-api.micronaut-json-api.main" options="-parameters -Amicronaut.processing.incremental=true -Amicronaut.processing.annotations=io.github.baylorpaul.micronautjsonapi.* -Amicronaut.processing.group=io.github.baylorpaul -Amicronaut.processing.module=micronaut-json-api" />
+      <module name="micronaut-json-api.micronaut-json-api.test" options="-parameters -Amicronaut.processing.incremental=true -Amicronaut.processing.annotations=io.github.baylorpaul.micronautjsonapi.* -Amicronaut.processing.group=io.github.baylorpaul -Amicronaut.processing.module=micronaut-json-api" />
+    </option>
+  </component>
 </project>
