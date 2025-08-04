@@ -61,7 +61,7 @@ to your API:
 1. Implement the JsonApiResourceable interface on your entity.
 2. Ensure the value in `toResourceType()` is unique.
 3. Apply the `@Id` annotation to your ID field. This will hide it from the JSON:API attributes.
-4. Apply the `@Relationship` annotation to each relationship field.
+4. Apply the `@Relation` annotation to each relationship field.
 5. Add the `@JsonIgnore` annotation to fields you do not want to expose as JSON:API attributes or relationships.
 6. In your controller method, find the result, and map it to a `JsonApiTopLevelResource` via `JsonApiResourceable::toTopLevelResource`. E.g.
 	```java
