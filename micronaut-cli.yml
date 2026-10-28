@@ -1,0 +1,7 @@
+applicationType: default
+defaultPackage: io.github.baylorpaul.micronautjsonapi
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, gitignore, gradle, http-client-test, java, java-application, junit, logback, micronaut-aot, micronaut-build, micronaut-configuration-validation-gradle-plugin, micronaut-http-validation, netty-server, properties, readme, serialization-jackson, shade, static-resources]
+# https://micronaut.io/launch/?type=DEFAULT&name=micronaut-json-api&package=io.github.baylorpaul.micronautjsonapi&javaVersion=JDK_25&lang=JAVA&build=GRADLE&test=JUNIT&version=5.2.4
